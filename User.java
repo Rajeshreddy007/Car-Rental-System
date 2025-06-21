@@ -1,6 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 class UserInfo {
     private String cusId;
     private String cusName;
@@ -32,82 +33,131 @@ class UserInfo {
 }
 
 public class User {
-    public void userDetails(List<Car> carList) {
-        Scanner sc = new Scanner(System.in);
-            System.out.println("--- Welcome to User Page ---");
+    public void userDetails(List<Car> carList, Scanner sc) {
+        System.out.println("--- Welcome to User Page ---");
+        List<UserInfo> userList = new ArrayList<>();
+        boolean status = true;
 
-            List<UserInfo> userList = new ArrayList<>();
-            UserInfo ui = new UserInfo();
+        while (status) {
+            System.out.println("\nMenu:");
+            System.out.println("1. Rent Car");
+            System.out.println("2. Return Car");
+            System.out.println("3. Exit");
+            System.out.print("Choose any one option: ");
 
-            System.out.print("Enter Customer ID: ");
-            ui.setCusId(sc.next());
+            int choice = sc.nextInt();
 
-            System.out.print("Enter Customer Name: ");
-            ui.setCusName(sc.next());
+            switch (choice) {
+                case 1: // Rent Car
+                    UserInfo ui = new UserInfo(); // ✅ NEW object each time
+                    System.out.print("Enter Customer ID: ");
+                    ui.setCusId(sc.next());
 
-            System.out.print("Enter Customer Age: ");
-            ui.setCusAge(sc.nextInt());
+                    System.out.print("Enter Customer Name: ");
+                    ui.setCusName(sc.next());
 
-            userList.add(ui);
+                    System.out.print("Enter Customer Age: ");
+                    int age = sc.nextInt();
 
-            boolean status = true;
+                    if (age <= 18) {
+                        System.out.println("You must be above 18 years old to rent a car.");
+                        break;
+                    }
 
-            while (status) {
-                System.out.println("\nMenu:");
-                System.out.println("1. Rent Car");
-                System.out.println("2. Exit");
-                System.out.print("Choose any one option: ");
+                    ui.setCusAge(age);
+                    userList.add(ui);
 
-                int choice = sc.nextInt();
-
-                switch (choice) {
-                    case 1:
-                        boolean anyAvailable = false;
-                        for (Car c : carList) {
-                            if (c.isAvailable()) {
-                                anyAvailable = true;
-                                break;
-                            }
-                        }
-
-                        if (!anyAvailable) {
-                            System.out.println("No cars available for rent.");
+                    boolean available = false;
+                    for (Car c : carList) {
+                        if (c.isAvailable()) {
+                            available = true;
                             break;
                         }
+                    }
 
-                        System.out.println("\n--- Available Cars ---");
-                        for (Car c : carList) {
-                            if (c.isAvailable()) {
-                                System.out.println(c);
-                            }
-                        }
-
-                        System.out.print("Enter Car ID to rent: ");
-                        String rentId = sc.next();
-                        boolean found = false;
-
-                        for (Car c : carList) {
-                            if (c.getCar_id().equals(rentId) && c.isAvailable()) {
-                                c.setAvailable(false);
-                                System.out.println("Car Rented Successfully: " + c.getCar_name());
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found) {
-                            System.out.println("Car ID not found or not available.");
-                        }
+                    if (!available) {
+                        System.out.println("No cars available for rent.");
                         break;
+                    }
 
-                    case 2:
-                        status = false;
-                        System.out.println("--- Exit Successfully ---");
+                    System.out.println("\n--- Available Cars ---");
+                    for (Car c : carList) {
+                        if (c.isAvailable()) {
+                            System.out.println(c);
+                        }
+                    }
+
+                    System.out.print("Enter Car ID to rent: ");
+                    String rentId = sc.next();
+                    boolean found = false;
+
+                    for (Car c : carList) {
+                        if (c.getCar_id().equals(rentId) && c.isAvailable()) {
+                            System.out.print("Enter number of days to rent: ");
+                            int days = sc.nextInt();
+                            int total = c.getBase_price() * days;
+
+                            System.out.println("Car Rented Successfully: " + c.getCar_name());
+                            System.out.println("Total Amount for " + days + " days: " + total);
+
+                            c.setAvailable(false);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        System.out.println("Car ID not found or already rented.");
+                    }
+                    break;
+
+                case 2: // Return Car
+                    boolean anyRented = false;
+                    for (Car c : carList) {
+                        if (!c.isAvailable()) {
+                            anyRented = true;
+                            break;
+                        }
+                    }
+
+                    if (!anyRented) {
+                        System.out.println("No cars are currently rented.");
                         break;
+                    }
 
-                    default:
-                        System.out.println("Invalid option. Please try again.");
-                }
+                    System.out.println("\n--- Rented Cars ---");
+                    for (Car c : carList) {
+                        if (!c.isAvailable()) {
+                            System.out.println(c);
+                        }
+                    }
+
+                    System.out.print("Enter Car ID to return: ");
+                    String returnId = sc.next();
+                    boolean returned = false;
+
+                    for (Car c : carList) {
+                        if (c.getCar_id().equals(returnId) && !c.isAvailable()) {
+                            c.setAvailable(true);
+                            System.out.println("Car returned successfully: " + c.getCar_name());
+                            returned = true;
+                            break;
+                        }
+                    }
+
+                    if (!returned) {
+                        System.out.println("Car ID not found or already returned.");
+                    }
+                    break;
+
+                case 3:
+                    status = false;
+                    System.out.println("--- Exit Successfully ---");
+                    break;
+
+                default:
+                    System.out.println("Invalid option. Please try again.");
             }
+        }
     }
 }

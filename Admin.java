@@ -2,8 +2,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Admin {
-    public void manageCars(List<Car> carList) {
-        Scanner sc = new Scanner(System.in);
+    public void manageCars(List<Car> carList, Scanner sc) {
             System.out.println("--- Welcome to Admin Page ---");
 
             boolean status = true;

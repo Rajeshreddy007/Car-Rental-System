@@ -21,14 +21,14 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    admin.manageCars(carList);  // Admin adds or views cars
+                    admin.manageCars(carList, sc); 
                     break;
 
                 case 2:
                     if (carList.isEmpty()) {
                         System.out.println("No cars available. Please ask admin to add cars.");
                     } else {
-                        user.userDetails(carList);  // User can rent cars
+                        user.userDetails(carList, sc);
                     }
                     break;
 
