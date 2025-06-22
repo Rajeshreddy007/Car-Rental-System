@@ -33,7 +33,7 @@ class UserInfo {
 }
 
 public class User {
-    public void userDetails(List<Car> carList, Scanner sc) {
+    public void userDetails(List<Car> carList, Scanner sc, List<RentalRecord> rentalList){
         System.out.println("--- Welcome to User Page ---");
         List<UserInfo> userList = new ArrayList<>();
         boolean status = true;
@@ -49,7 +49,7 @@ public class User {
 
             switch (choice) {
                 case 1: // Rent Car
-                    UserInfo ui = new UserInfo(); // ✅ NEW object each time
+                    UserInfo ui = new UserInfo();
                     System.out.print("Enter Customer ID: ");
                     ui.setCusId(sc.next());
 
@@ -99,7 +99,11 @@ public class User {
 
                             System.out.println("Car Rented Successfully: " + c.getCar_name());
                             System.out.println("Total Amount for " + days + " days: " + total);
-
+                            RentalRecord record = new RentalRecord(
+                            ui.getCusId(), ui.getCusName(), ui.getCusAge(),
+                            c.getCar_id(), c.getCar_name(), days, total
+                            );
+                            rentalList.add(record);
                             c.setAvailable(false);
                             found = true;
                             break;
@@ -136,12 +140,25 @@ public class User {
                     String returnId = sc.next();
                     boolean returned = false;
 
-                    for (Car c : carList) {
-                        if (c.getCar_id().equals(returnId) && !c.isAvailable()) {
-                            c.setAvailable(true);
-                            System.out.println("Car returned successfully: " + c.getCar_name());
-                            returned = true;
-                            break;
+                    for (int i = 0; i < carList.size(); i++) {
+                    Car c = carList.get(i);
+                    if (c.getCar_id().equals(returnId) && !c.isAvailable()) {
+                        c.setAvailable(true);
+                        // Remove from rental record
+                        RentalRecord toRemove = null;
+                        for (RentalRecord r : rentalList) {
+                            if (r.getCarId().equals(returnId)) {
+                                toRemove = r;
+                                break;
+                            }
+                        }
+                        if (toRemove != null) {
+                            rentalList.remove(toRemove);
+                        }
+
+                        System.out.println("Car returned successfully: " + c.getCar_name());
+                        returned = true;
+                        break;
                         }
                     }
 

@@ -6,6 +6,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         List<Car> carList = new ArrayList<>();
+        List<RentalRecord> rentalList = new ArrayList<>();
         Admin admin = new Admin();
         User user = new User();
 
@@ -21,14 +22,14 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    admin.manageCars(carList, sc); 
+                    admin.manageCars(carList, sc, rentalList);
                     break;
 
                 case 2:
                     if (carList.isEmpty()) {
                         System.out.println("No cars available. Please ask admin to add cars.");
                     } else {
-                        user.userDetails(carList, sc);
+                        user.userDetails(carList, sc, rentalList);
                     }
                     break;
 
