@@ -5,6 +5,9 @@
 This is a simple console-based Car Rental System developed in Java using Object-Oriented Programming (OOP) principles and ArrayLists — no databases or external frameworks. 
 The system supports both Admin and User functionalities through a menu-driven interface.
 
+![image](https://github.com/user-attachments/assets/b2d8ee15-a4b9-4bbb-924c-dc9255aa1935)
+
+
 👥 **Roles & Features**
 
     🔐 Admin:
